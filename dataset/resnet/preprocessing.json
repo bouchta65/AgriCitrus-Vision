@@ -1,0 +1,51 @@
+{
+  "task": "classification",
+  "model_family": "ResNet50",
+  "classes": [
+    "healthy",
+    "black_spot",
+    "canker",
+    "greening",
+    "scab"
+  ],
+  "image_preprocessing": {
+    "resize": [
+      224,
+      224
+    ],
+    "color": "RGB/BGR image file saved as jpg; convert to RGB in the training dataloader",
+    "pixel_scale": "divide tensor values by 255.0",
+    "normalization": {
+      "mean": [
+        0.485,
+        0.456,
+        0.406
+      ],
+      "std": [
+        0.229,
+        0.224,
+        0.225
+      ],
+      "reason": "ImageNet normalization recommended for pretrained ResNet50 transfer learning"
+    }
+  },
+  "augmentation": {
+    "split": "train only",
+    "target_per_class": 1500,
+    "transforms": [
+      "HorizontalFlip",
+      "VerticalFlip",
+      "Rotate +/-30 deg",
+      "RandomBrightnessContrast +/-0.3",
+      "HueSaturationValue",
+      "Affine zoom 0.8-1.2",
+      "GaussNoise"
+    ]
+  },
+  "no_data_leakage": {
+    "split_before_augmentation": true,
+    "exact_duplicates_removed_by_md5": true,
+    "perceptual_duplicate_groups_kept_in_same_split": true
+  },
+  "pytorch_reference_transform": "transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor(), transforms.Normalize(mean=[0.485,0.456,0.406], std=[0.229,0.224,0.225])])"
+}
