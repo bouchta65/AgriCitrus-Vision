@@ -1,0 +1,21 @@
+{
+  "task": "detection",
+  "model_family": "YOLOv8",
+  "class_mapping": {
+    "0": "agrume"
+  },
+  "image_preprocessing": {
+    "resize": "YOLOv8 redimensionne a l'entrainement avec imgsz=640",
+    "normalization": "pixels convertis en float32 et normalises sur [0, 1] par Ultralytics",
+    "saved_images": "jpg couleur BGR/RGB standard, pas de normalisation destructive sur disque"
+  },
+  "label_preprocessing": {
+    "format": "class x_center y_center width height",
+    "coordinates": "normalisees entre 0 et 1",
+    "all_source_classes_remapped_to": 0
+  },
+  "augmentation": {
+    "where": "pendant l'entrainement YOLO, pas avant le split",
+    "recommended_train_command": "yolo detect train model=yolov8s.pt data=dataset/yolo/data.yaml epochs=100 imgsz=640"
+  }
+}
