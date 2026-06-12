@@ -1,0 +1,13 @@
+names:
+- non_orange
+- orange
+nc: 2
+roboflow:
+  license: CC BY 4.0
+  project: oranges-detection-yroy3
+  url: https://universe.roboflow.com/oranges-quality/oranges-detection-yroy3/dataset/1
+  version: 1
+  workspace: oranges-quality
+test: ../test/images
+train: ../train/images
+val: ../valid/images
