@@ -1,0 +1,19 @@
+{
+  "data_root": "dataset/resnet",
+  "output_dir": "runs/resnet50_cv",
+  "folds": 5,
+  "epochs_head": 12,
+  "epochs_finetune": 30,
+  "batch_size": 32,
+  "num_workers": 0,
+  "seed": 42,
+  "lr_head": 0.001,
+  "lr_finetune": 3e-05,
+  "weight_decay": 0.0001,
+  "patience": 8,
+  "focal_gamma": 2.0,
+  "dropout": 0.35,
+  "min_delta": 0.0001,
+  "tta": 8,
+  "sampler_replacement": true
+}

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 """
 Construction des datasets FrishVale.
 
@@ -170,8 +170,10 @@ def is_quasi_duplicate(img_hash: int, seen_hashes: Sequence[int], threshold: int
     return any(hamming(img_hash, old) <= threshold for old in seen_hashes)
 
 
-def split_grouped_by_hash(items: List[Tuple], hash_index: int, seed: int = 42) -> Dict[str, List]:
-    """Split 70/15/15 en gardant les doublons perceptuels exacts ensemble."""
+def split_grouped_by_hash(
+    items: List[Tuple], hash_index: int, seed: int = 42, near_duplicate_threshold: int = 2
+) -> Dict[str, List]:
+    """Split 70/15/15 en gardant les doublons perceptuels ensemble."""
     groups_by_hash: Dict[int, List[Tuple]] = defaultdict(list)
     unique_none_counter = 0
     for item in items:
@@ -181,8 +183,27 @@ def split_grouped_by_hash(items: List[Tuple], hash_index: int, seed: int = 42) -
             unique_none_counter += 1
         groups_by_hash[int(img_hash)].append(item)
 
+    merged_groups: List[List[Tuple]] = []
+    group_hashes: List[List[int]] = []
+    for img_hash, group in groups_by_hash.items():
+        if img_hash < 0:
+            merged_groups.append(group)
+            group_hashes.append([img_hash])
+            continue
+        match_idx = None
+        for idx, hashes in enumerate(group_hashes):
+            if any(old_hash >= 0 and hamming(img_hash, old_hash) <= near_duplicate_threshold for old_hash in hashes):
+                match_idx = idx
+                break
+        if match_idx is None:
+            merged_groups.append(group)
+            group_hashes.append([img_hash])
+        else:
+            merged_groups[match_idx].extend(group)
+            group_hashes[match_idx].append(img_hash)
+
     rng = random.Random(seed)
-    groups = list(groups_by_hash.values())
+    groups = merged_groups
     rng.shuffle(groups)
     groups.sort(key=len, reverse=True)
 
@@ -244,6 +265,15 @@ def split_stratified_grouped(
         for split_name, split_items in grouped.items():
             splits[split_name].extend([item for item, _img_hash in split_items])
     return splits
+
+def is_low_quality_classification_image(image) -> bool:
+    if image is None:
+        return True
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    mean = float(gray.mean())
+    std = float(gray.std())
+    height, width = gray.shape[:2]
+    return width < 80 or height < 80 or mean < 15.0 or std < 8.0
 
 
 def write_jpg(image, dest: Path, size: Optional[Tuple[int, int]] = None) -> None:
@@ -658,6 +688,9 @@ def dedupe_classification_items(items: List[ClassificationItem]) -> List[Tuple[C
         if img is None:
             stats["images_corrompues"] += 1
             continue
+        if is_low_quality_classification_image(img):
+            stats["images_basse_qualite"] += 1
+            continue
         digest = md5_file(item.image)
         if digest in seen_md5:
             stats["doublons_md5"] += 1
@@ -903,3 +936,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+

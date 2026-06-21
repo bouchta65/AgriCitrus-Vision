@@ -1,0 +1,46 @@
+{
+  "accuracy": 0.958102279728897,
+  "precision_macro": 0.9583073588588367,
+  "recall_macro": 0.9588462292885087,
+  "macro_f1": 0.9585516577710871,
+  "balanced_accuracy": 0.9588462292885087,
+  "confusion_matrix": [
+    [
+      312,
+      22,
+      2,
+      0,
+      1
+    ],
+    [
+      21,
+      308,
+      4,
+      0,
+      4
+    ],
+    [
+      0,
+      0,
+      303,
+      0,
+      7
+    ],
+    [
+      0,
+      0,
+      0,
+      334,
+      0
+    ],
+    [
+      0,
+      4,
+      3,
+      0,
+      298
+    ]
+  ],
+  "classification_report": "              precision    recall  f1-score   support\n\n  black_spot     0.9369    0.9258    0.9313       337\n      canker     0.9222    0.9139    0.9180       337\n    greening     0.9712    0.9774    0.9743       310\n     healthy     1.0000    1.0000    1.0000       334\n        scab     0.9613    0.9770    0.9691       305\n\n    accuracy                         0.9581      1623\n   macro avg     0.9583    0.9588    0.9586      1623\nweighted avg     0.9580    0.9581    0.9580      1623\n",
+  "roc_auc_ovr_macro": 0.998552490653012
+}
