@@ -1,4 +1,4 @@
-path: .
+path: F:/Ali/dataset/yolo
 train: train/images
 val: valid/images
 test: test/images
