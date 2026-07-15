@@ -1,0 +1,6 @@
+{
+  "name": "CitrusQA",
+  "description": "AI-powered citrus fruit grading and quality control system.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
